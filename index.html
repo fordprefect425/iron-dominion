@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Iron Dominion — A 4X Railway Empire Strategy Game. Explore, expand, exploit, and exterminate your way to railway domination." />
+    <title>Iron Dominion — 4X Railway Empire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+</head>
+
+<body>
+    <div id="game-container"></div>
+    <div id="ui-overlay">
+        <!-- Top Bar -->
+        <div id="top-bar">
+            <div class="top-bar-left">
+                <div class="company-logo">⚙</div>
+                <div class="company-name">Iron Dominion</div>
+            </div>
+            <div class="top-bar-center">
+                <div class="resource-item" id="funds-display">
+                    <span class="resource-icon">💰</span>
+                    <span class="resource-label">Balance</span>
+                    <span class="resource-value" id="funds-value">$50,000</span>
+                </div>
+                <div class="resource-item" id="income-display">
+                    <span class="resource-icon">📈</span>
+                    <span class="resource-label">Income</span>
+                    <span class="resource-value income-positive" id="income-value">+$0</span>
+                </div>
+                <div class="resource-item" id="expenses-display">
+                    <span class="resource-icon">📉</span>
+                    <span class="resource-label">Costs</span>
+                    <span class="resource-value income-negative" id="expenses-value">-$0</span>
+                </div>
+                <div class="resource-item" id="net-display">
+                    <span class="resource-icon">💵</span>
+                    <span class="resource-label">Net/mo</span>
+                    <span class="resource-value" id="net-value">+$0</span>
+                </div>
+                <div class="resource-item" id="trains-display" style="cursor: pointer" title="Click to manage fleet">
+                    <span class="resource-icon">🚂</span>
+                    <span class="resource-label">Trains</span>
+                    <span class="resource-value" id="trains-value">0</span>
+                </div>
+                <div class="resource-item" id="rp-display" style="cursor: pointer" title="Click to open Research">
+                    <span class="resource-icon">🔬</span>
+                    <span class="resource-label">Research</span>
+                    <span class="resource-value" id="rp-value">0 RP</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="era-badge" id="era-badge">
+                    <span class="era-label">Steam Era</span>
+                </div>
+                <div class="date-display" id="date-display">
+                    <span class="date-text">Jan 1840</span>
+                </div>
+                <div class="speed-controls">
+                    <button class="speed-btn" data-speed="0" title="Pause">⏸</button>
+                    <button class="speed-btn active" data-speed="1" title="Normal">▶</button>
+                    <button class="speed-btn" data-speed="2" title="Fast">▶▶</button>
+                    <button class="speed-btn" data-speed="3" title="Ultra">▶▶▶</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar (Bottom) -->
+        <div id="action-bar">
+            <div class="action-group">
+                <button class="action-btn" id="btn-select" data-tool="select" title="Select (Q)">
+                    <span class="action-icon">🔍</span>
+                    <span class="action-label">Select</span>
+                </button>
+                <button class="action-btn" id="btn-track" data-tool="track" title="Build Track (T)">
+                    <span class="action-icon">🛤️</span>
+                    <span class="action-label">Track</span>
+                </button>
+                <button class="action-btn" id="btn-station" data-tool="station" title="Build Station (S)">
+                    <span class="action-icon">🏛️</span>
+                    <span class="action-label">Station</span>
+                </button>
+                <button class="action-btn" id="btn-train" data-tool="train" title="Buy Train (R)">
+                    <span class="action-icon">🚂</span>
+                    <span class="action-label">Train</span>
+                </button>
+                <button class="action-btn" id="btn-demolish" data-tool="demolish" title="Demolish (D)">
+                    <span class="action-icon">🔨</span>
+                    <span class="action-label">Demolish</span>
+                </button>
+            </div>
+            <div class="action-divider"></div>
+            <div class="action-group">
+                <button class="action-btn" id="btn-research" data-tool="research" title="Research (E)">
+                    <span class="action-icon">🔬</span>
+                    <span class="action-label">Research</span>
+                </button>
+                <button class="action-btn" id="btn-diplomacy" data-tool="diplomacy" title="Diplomacy (P)">
+                    <span class="action-icon">🤝</span>
+                    <span class="action-label">Diplomacy</span>
+                </button>
+                <button class="action-btn" id="btn-economy" data-tool="economy" title="Economy (Y)">
+                    <span class="action-icon">📊</span>
+                    <span class="action-label">Economy</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Info Panel (Right sidebar) -->
+        <div id="info-panel" class="collapsed">
+            <button id="info-panel-toggle" class="panel-toggle">◀</button>
+            <div class="panel-content">
+                <div class="panel-header">
+                    <h2 id="panel-title">Welcome</h2>
+                </div>
+                <div class="panel-body" id="panel-body">
+                    <p class="welcome-text">Welcome to <strong>Iron Dominion</strong>.</p>
+                    <p class="welcome-text">Click on the map to explore. Build tracks to connect cities and start your
+                        railway empire!</p>
+                    <div class="hint-box">
+                        <span class="hint-icon">💡</span>
+                        <span>Press <kbd>T</kbd> to start building tracks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Train Management Panel (overlay) -->
+        <div id="train-panel" class="modal-panel hidden">
+            <div class="modal-panel-backdrop"></div>
+            <div class="modal-panel-content">
+                <div class="modal-panel-header">
+                    <h2>🚂 Train Fleet</h2>
+                    <button id="train-panel-close" class="modal-close-btn">✕</button>
+                </div>
+                <div class="modal-panel-body" id="train-panel-body">
+                    <p class="empty-state">No trains yet. Buy trains by selecting stations with the Train tool (R).</p>
+                </div>
+                <div class="modal-panel-footer">
+                    <div class="fleet-summary" id="fleet-summary"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Panel (overlay) -->
+        <div id="research-panel" class="modal-panel hidden">
+            <div class="modal-panel-backdrop research-backdrop"></div>
+            <div class="modal-panel-content" style="width: 700px; max-height: 85vh">
+                <div class="modal-panel-header">
+                    <h2>🔬 Technology Research</h2>
+                    <div style="display: flex; align-items: center; gap: 16px">
+                        <span class="rp-counter" id="research-rp-counter">0 RP</span>
+                        <button id="research-panel-close" class="modal-close-btn">✕</button>
+                    </div>
+                </div>
+                <div class="modal-panel-body" id="research-panel-body" style="padding: 0">
+                </div>
+            </div>
+        </div>
+
+        <!-- Minimap -->
+        <div id="minimap-container">
+            <canvas id="minimap-canvas" width="200" height="150"></canvas>
+            <div class="minimap-viewport" id="minimap-viewport"></div>
+        </div>
+
+        <!-- Notifications -->
+        <div id="notifications-container"></div>
+    </div>
+
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="gear-icon">⚙</div>
+                <h1 class="loading-title">Iron Dominion</h1>
+                <p class="loading-subtitle">4X Railway Empire</p>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loading-bar"></div>
+            </div>
+            <p class="loading-status" id="loading-status">Generating world...</p>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
