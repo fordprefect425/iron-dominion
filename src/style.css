@@ -1318,7 +1318,7 @@ kbd {
     }
 
     .company-logo {
-        font-size: 20px;
+        display: none;
     }
 
     .resource-item {
@@ -1397,7 +1397,7 @@ kbd {
     }
 
     #info-panel.collapsed {
-        transform: translateY(100%);
+        transform: translateY(calc(100% + 70px));
     }
 
     #info-panel:not(.collapsed) {
@@ -1414,11 +1414,12 @@ kbd {
         border-bottom: none;
         width: 80px;
         height: 46px;
-        transform: none !important;
+        transform: none;
         color: transparent;
         /* Hide the desktop arrow */
         background: var(--panel-bg-solid);
         box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .panel-toggle::after {
@@ -1436,6 +1437,7 @@ kbd {
 
     #info-panel.collapsed .panel-toggle {
         background: var(--panel-bg-solid);
+        transform: translateY(-70px);
     }
 
     #info-panel.collapsed .panel-toggle::after {
