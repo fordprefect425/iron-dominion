@@ -1378,24 +1378,26 @@ kbd {
 
     /* Info Panel Sidebar */
     #info-panel {
-        top: 110px;
-        /* Below double top-bar */
+        top: auto;
         bottom: 70px;
         /* Above action bar */
+        height: 60vh;
         width: 100%;
         max-width: 100%;
         right: 0;
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         border: 1px solid var(--panel-border);
         border-bottom: none;
-        transform: translateY(120%);
+        background: rgba(44, 44, 52, 0.98);
+        transform: translateY(0);
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 40;
+        overflow: visible;
+        /* Prevent clipping */
     }
 
     #info-panel.collapsed {
-        transform: translateY(0);
-        bottom: calc(100vh - 120px);
+        transform: translateY(100%);
     }
 
     #info-panel:not(.collapsed) {
@@ -1405,28 +1407,31 @@ kbd {
     .panel-toggle {
         left: unset;
         right: 16px;
-        top: -36px;
+        top: -46px;
+        /* Stick out above panel */
         border-radius: var(--radius-md) var(--radius-md) 0 0;
         border: 1px solid var(--panel-border);
         border-bottom: none;
         width: 80px;
-        height: 36px;
+        height: 46px;
         transform: none !important;
         color: transparent;
         /* Hide the desktop arrow */
+        background: var(--panel-bg-solid);
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .panel-toggle::after {
         content: "▼ Back";
         color: var(--gold);
-        font-size: 14px;
+        font-size: 15px;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         white-space: nowrap;
         font-family: var(--font-body);
-        font-weight: 600;
+        font-weight: 700;
     }
 
     #info-panel.collapsed .panel-toggle {
