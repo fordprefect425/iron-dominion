@@ -37,6 +37,9 @@ export class GameScene extends Phaser.Scene {
     private economyTimer = 0;
     private readonly ECONOMY_INTERVAL = 5000;
     private trainRouteStations: HexCoord[] = [];
+    private isPinching = false;
+    private pinchStartDist = 0;
+    private pinchStartZoom = 1;
 
     constructor() {
         super({ key: 'GameScene' });
@@ -64,6 +67,9 @@ export class GameScene extends Phaser.Scene {
         const worldH = MAP_HEIGHT * HEX_SIZE * 2;
         this.cameras.main.setBounds(-100, -100, worldW + 200, worldH + 200);
         this.cameras.main.setZoom(1.5);
+
+        // Enable multi-touch for pinch zoom
+        this.input.addPointer(1);
 
         this.setupInput();
         this.setupUI();
@@ -347,13 +353,36 @@ export class GameScene extends Phaser.Scene {
     private setupInput(): void {
         // Left-click: start potential drag or click
         this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-            this.isDragging = true;
-            this.dragDidMove = false;
-            this.dragStart = { x: pointer.x, y: pointer.y };
-            this.camStart = { x: this.cameras.main.scrollX, y: this.cameras.main.scrollY };
+            if (this.input.pointer1.isDown && this.input.pointer2.isDown) {
+                // Starting a pinch, ignore drag click
+                this.isPinching = true;
+                this.isDragging = false;
+                const dist = Phaser.Math.Distance.Between(
+                    this.input.pointer1.x, this.input.pointer1.y,
+                    this.input.pointer2.x, this.input.pointer2.y
+                );
+                this.pinchStartDist = dist;
+                this.pinchStartZoom = this.cameras.main.zoom;
+            } else {
+                this.isDragging = true;
+                this.dragDidMove = false;
+                this.dragStart = { x: pointer.x, y: pointer.y };
+                this.camStart = { x: this.cameras.main.scrollX, y: this.cameras.main.scrollY };
+            }
         });
 
         this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+            if (this.isPinching && this.input.pointer1.isDown && this.input.pointer2.isDown) {
+                const dist = Phaser.Math.Distance.Between(
+                    this.input.pointer1.x, this.input.pointer1.y,
+                    this.input.pointer2.x, this.input.pointer2.y
+                );
+                const scale = dist / this.pinchStartDist;
+                const newZoom = Phaser.Math.Clamp(this.pinchStartZoom * scale, 0.5, 3);
+                this.cameras.main.setZoom(newZoom);
+                return;
+            }
+
             // Update hover hex
             const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
             this.hoverHex = pixelToHex({ x: worldPoint.x, y: worldPoint.y });
@@ -362,8 +391,8 @@ export class GameScene extends Phaser.Scene {
                 this.hoverHex = null;
             }
 
-            // Drag to pan (only after exceeding threshold)
-            if (this.isDragging && pointer.isDown) {
+            // Drag to pan (only after exceeding threshold, and not pinching)
+            if (this.isDragging && pointer.isDown && !this.isPinching) {
                 const dx = pointer.x - this.dragStart.x;
                 const dy = pointer.y - this.dragStart.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
@@ -377,6 +406,13 @@ export class GameScene extends Phaser.Scene {
         });
 
         this.input.on('pointerup', () => {
+            if (this.isPinching) {
+                if (!this.input.pointer1.isDown && !this.input.pointer2.isDown) {
+                    this.isPinching = false;
+                }
+                return;
+            }
+
             // Only fire click if we didn't drag
             if (this.isDragging && !this.dragDidMove) {
                 this.handleClick();

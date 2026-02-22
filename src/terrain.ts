@@ -39,6 +39,23 @@ export const TERRAIN_DATA: Record<TerrainType, TerrainInfo> = {
     [TerrainType.Water]: { type: TerrainType.Water, trackCostMultiplier: Infinity, speedModifier: 0, color: 0x2A5298, label: 'Water' },
 };
 
+// City tiers
+export type CityTier = 'town' | 'city' | 'metropolis' | 'megapolis';
+
+export const CITY_TIER_RANGES: Record<CityTier, { min: number; max: number }> = {
+    town: { min: 500, max: 5000 },
+    city: { min: 5000, max: 25000 },
+    metropolis: { min: 25000, max: 100000 },
+    megapolis: { min: 100000, max: 1000000 },
+};
+
+export function getCityTier(population: number): CityTier {
+    if (population >= 100000) return 'megapolis';
+    if (population >= 25000) return 'metropolis';
+    if (population >= 5000) return 'city';
+    return 'town';
+}
+
 // City data
 export interface CityData {
     hex: HexCoord;
@@ -217,7 +234,14 @@ export function generateMap(width: number, height: number, seed: number = Date.n
         const tooClose = cities.some(c => hexDistance(c.hex, hex) < MIN_CITY_DISTANCE);
         if (tooClose) continue;
 
-        const pop = 500 + Math.floor(Math.random() * 4500);
+        // Weighted tier selection: ~50% town, ~30% city, ~15% metropolis, ~5% megapolis
+        const tierRoll = Math.random();
+        const tier: CityTier = tierRoll < 0.50 ? 'town'
+            : tierRoll < 0.80 ? 'city'
+                : tierRoll < 0.95 ? 'metropolis'
+                    : 'megapolis';
+        const range = CITY_TIER_RANGES[tier];
+        const pop = range.min + Math.floor(Math.random() * (range.max - range.min));
         const name = namePool.pop() || `City ${cities.length + 1}`;
 
         cities.push({

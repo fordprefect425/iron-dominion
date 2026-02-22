@@ -110,6 +110,27 @@ export const TRAIN_CONFIGS: Record<Train['type'], { speed: number; capacity: num
 
 let notifId = 0;
 
+// Era-based train maintenance costs ($/month)
+export const TRAIN_MAINTENANCE_BY_ERA: Record<Train['type'], Record<GameState['era'], number>> = {
+    freight: { steam: 50, diesel: 75, electric: 110, maglev: 165 },
+    passenger: { steam: 80, diesel: 120, electric: 180, maglev: 270 },
+    mail: { steam: 40, diesel: 60, electric: 90, maglev: 135 },
+    mixed: { steam: 65, diesel: 90, electric: 130, maglev: 195 },
+    luxury: { steam: 120, diesel: 180, electric: 270, maglev: 405 },
+    express: { steam: 150, diesel: 220, electric: 330, maglev: 495 },
+    commuter: { steam: 100, diesel: 150, electric: 220, maglev: 330 },
+    bullet: { steam: 200, diesel: 300, electric: 450, maglev: 675 },
+    hyperloop: { steam: 350, diesel: 520, electric: 780, maglev: 1170 },
+};
+
+// Era-based track segment maintenance ($/month per segment)
+export const TRACK_MAINTENANCE_BY_ERA: Record<GameState['era'], number> = {
+    steam: 5,
+    diesel: 10,
+    electric: 50,
+    maglev: 250,
+};
+
 export function createGameState(map: GameMap): GameState {
     return {
         map,
@@ -406,14 +427,14 @@ export function updateEconomy(state: GameState): void {
 
     // Calculate this month's maintenance costs
     let totalMaintenance = 0;
-    totalMaintenance += state.tracks.size * 5;
+    totalMaintenance += state.tracks.size * TRACK_MAINTENANCE_BY_ERA[state.era];
 
     state.stations.forEach((s: Station) => {
         totalMaintenance += s.type === 'terminal' ? 200 : s.type === 'station' ? 100 : 30;
     });
 
     for (const train of state.trains) {
-        totalMaintenance += train.maintenanceCost;
+        totalMaintenance += TRAIN_MAINTENANCE_BY_ERA[train.type]?.[state.era] ?? train.maintenanceCost;
     }
 
     totalMaintenance = Math.floor(totalMaintenance * maintReduction);

@@ -1,0 +1,150 @@
+Sheet,Parameter,Value,Unit/Notes
+
+--- STARTING CONDITIONS ---,,,
+Starting,Starting Funds,50000,$
+Starting,Starting Year,1840,year
+Starting,Starting Era,steam,steam/diesel/electric/maglev
+Starting,Economy Tick Interval,5000,ms (base)
+
+--- GAME SPEED ---,,,
+Game Speed,Paused (0) - Train Multiplier,0,×
+Game Speed,Normal (1) - Train Multiplier,1,×
+Game Speed,Fast (2) - Train Multiplier,3,×
+Game Speed,Ultra (3) - Train Multiplier,8,×
+Game Speed,Paused (0) - Economy Interval Mult,0,×
+Game Speed,Normal (1) - Economy Interval Mult,1,×
+Game Speed,Fast (2) - Economy Interval Mult,0.33,×
+Game Speed,Ultra (3) - Economy Interval Mult,0.125,×
+
+--- BUILDING COSTS ---,,,
+Building Cost,Track Per Hex (base),500,$
+Building Cost,Station - Halt,1000,$
+Building Cost,Station - Basic,3000,$
+Building Cost,Station - Junction,5000,$
+Building Cost,Station - Terminal,15000,$
+Building Cost,Demolish Track,100,$
+Building Cost,Demolish Station,500,$
+
+--- TRAIN PURCHASE COSTS ---,,,
+Train Cost,Freight (Steam),5000,$
+Train Cost,Passenger (Steam),8000,$
+Train Cost,Mail (Steam),4000,$
+Train Cost,Mixed (Diesel),6000,$
+Train Cost,Luxury (Diesel),12000,$
+Train Cost,Express (Electric),15000,$
+Train Cost,Commuter (Electric),10000,$
+Train Cost,Bullet (Maglev),25000,$
+Train Cost,Hyperloop (Maglev),50000,$
+
+--- TRAIN BASE SPEED ---,,,
+Train Speed,Freight,0.15,units/tick
+Train Speed,Passenger,0.25,units/tick
+Train Speed,Mail,0.30,units/tick
+Train Speed,Mixed,0.20,units/tick
+Train Speed,Luxury,0.20,units/tick
+Train Speed,Express,0.40,units/tick
+Train Speed,Commuter,0.35,units/tick
+Train Speed,Bullet,0.55,units/tick
+Train Speed,Hyperloop,0.80,units/tick
+
+--- TRAIN CAPACITY ---,,,
+Train Capacity,Freight,100,units
+Train Capacity,Passenger,60,units
+Train Capacity,Mail,40,units
+Train Capacity,Mixed,70,units
+Train Capacity,Luxury,30,units
+Train Capacity,Express,80,units
+Train Capacity,Commuter,120,units
+Train Capacity,Bullet,90,units
+Train Capacity,Hyperloop,50,units
+
+--- TRAIN MAINTENANCE ---,,,
+Train Maintenance,Freight,50,$/month
+Train Maintenance,Passenger,80,$/month
+Train Maintenance,Mail,40,$/month
+Train Maintenance,Mixed,65,$/month
+Train Maintenance,Luxury,120,$/month
+Train Maintenance,Express,150,$/month
+Train Maintenance,Commuter,100,$/month
+Train Maintenance,Bullet,200,$/month
+Train Maintenance,Hyperloop,350,$/month
+
+--- TRAIN REVENUE TYPE MULTIPLIER ---,,,
+Revenue Multiplier,Freight,1.0,×
+Revenue Multiplier,Passenger,2.0,×
+Revenue Multiplier,Mail,1.0,×
+Revenue Multiplier,Mixed,1.0,×
+Revenue Multiplier,Luxury,3.0,×
+Revenue Multiplier,Express,2.5,×
+Revenue Multiplier,Commuter,1.5,×
+Revenue Multiplier,Bullet,4.0,×
+Revenue Multiplier,Hyperloop,5.0,×
+
+--- TERRAIN TRACK COST MULTIPLIER ---,,,
+Terrain Cost Mult,Plains,1.0,×
+Terrain Cost Mult,Forest,1.5,×
+Terrain Cost Mult,Hills,2.0,×
+Terrain Cost Mult,Mountains,4.0,×
+Terrain Cost Mult,River,3.0,×
+Terrain Cost Mult,Desert,1.2,×
+Terrain Cost Mult,Swamp,2.5,×
+Terrain Cost Mult,Coast,1.0,×
+Terrain Cost Mult,Water,Infinity,unbuildable
+
+--- TERRAIN SPEED MODIFIER ---,,,
+Terrain Speed Mod,Plains,1.0,×
+Terrain Speed Mod,Forest,0.8,×
+Terrain Speed Mod,Hills,0.6,×
+Terrain Speed Mod,Mountains,0.4,×
+Terrain Speed Mod,River,1.0,×
+Terrain Speed Mod,Desert,0.9,×
+Terrain Speed Mod,Swamp,0.5,×
+Terrain Speed Mod,Coast,1.0,×
+Terrain Speed Mod,Water,0,×
+
+--- MONTHLY MAINTENANCE (INFRA) ---,,,
+Infra Maintenance,Track Segment,5,$/month
+Infra Maintenance,Station - Halt,30,$/month
+Infra Maintenance,Station - Basic/Station,100,$/month
+Infra Maintenance,Station - Terminal,200,$/month
+
+--- REVENUE FORMULAS ---,,,
+Revenue,Route Completion Base,100,$ per hex in route × typeMultiplier × revenueBonus
+Revenue,City Delivery Min,50,$
+Revenue,City Delivery Max,249,$ (random 0-199 + 50)
+Revenue,Train Sell Refund,0.25,25% of purchase cost
+
+--- RESEARCH POINTS ---,,,
+Research,RP per Station (monthly),10,RP
+Research,RP from Income (monthly),0.02,2% of monthly income
+Research,Maintenance Reduction Cap,75,%
+
+--- TECH TREE ---,,,
+Tech,Basic Locomotive (Steam),0,RP - Unlock: freight
+Tech,Passenger Carriages (Steam),500,RP - Unlock: passenger
+Tech,Mail Coach (Steam),400,RP - Unlock: mail
+Tech,Improved Boiler (Steam),800,RP - +15% speed
+Tech,Diesel Engine (Diesel),1500,RP - Unlock: mixed
+Tech,Luxury Carriages (Diesel),2000,RP - Unlock: luxury
+Tech,Reinforced Chassis (Diesel),1200,RP - +25% capacity
+Tech,Efficient Logistics (Diesel),1800,RP - -20% maintenance
+Tech,Electric Motors (Electric),3000,RP - Unlock: express + electrified track
+Tech,Signal Systems (Electric),2500,RP - +20% revenue
+Tech,Commuter Networks (Electric),2800,RP - Unlock: commuter
+Tech,High-Speed Rails (Electric),4000,RP - +30% speed + highspeed track
+Tech,Maglev Technology (Maglev),6000,RP - Unlock: bullet
+Tech,Hyperloop Prototype (Maglev),10000,RP - Unlock: hyperloop
+Tech,Quantum Logistics (Maglev),8000,RP - -30% maintenance / +25% revenue
+Tech,Neural Networks (Maglev),7000,RP - +40% capacity / +20% speed
+
+--- ERA TRANSITIONS ---,,,
+Era,Steam → Diesel,1900,year
+Era,Diesel → Electric,1950,year
+Era,Electric → Maglev,2000,year
+
+--- CITY GROWTH ---,,,
+City,Min Growth Rate,0.01,1% per month
+City,Max Growth Rate,0.03,3% per month
+City,Growth Condition,has_station,city must have a station
+City,Min Starting Population,500,people
+City,Max Starting Population,5000,people

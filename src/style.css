@@ -241,18 +241,22 @@ body {
 .top-bar-center {
     display: flex;
     align-items: center;
-    gap: var(--space-xl);
+    gap: var(--space-md);
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
 }
 
 .resource-item {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-xs) var(--space-md);
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
     background: rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.06);
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .resource-item:hover {
@@ -1265,4 +1269,231 @@ kbd {
     font-size: 10px;
     color: var(--rust-red-light);
     font-style: italic;
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS (Max Width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+    :root {
+        --space-lg: 12px;
+        --space-xl: 16px;
+    }
+
+    /* Prevent accidental zoomed interactions on game canvas */
+    #game-container {
+        touch-action: none;
+    }
+
+    /* Top Bar: Split into 2 rows, hide unneeded text */
+    #top-bar {
+        height: auto;
+        padding: var(--space-xs) var(--space-sm);
+        flex-direction: column;
+        gap: var(--space-xs);
+        align-items: stretch;
+    }
+
+    .top-bar-left {
+        justify-content: space-between;
+        margin-bottom: 4px;
+    }
+
+    .top-bar-right {
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 4px;
+        gap: 8px;
+    }
+
+    .top-bar-center {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 4px;
+        justify-content: space-between;
+    }
+
+    .company-name {
+        display: none;
+    }
+
+    .company-logo {
+        font-size: 20px;
+    }
+
+    .resource-item {
+        flex: 1;
+        min-width: 30%;
+        justify-content: center;
+        padding: 6px;
+    }
+
+    .resource-label {
+        display: none;
+    }
+
+    .date-display {
+        padding: 4px;
+    }
+
+    .speed-btn {
+        min-width: 36px;
+        min-height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    /* Action Bar (Bottom) */
+    #action-bar {
+        bottom: var(--space-xs);
+        width: calc(100% - var(--space-sm) * 2);
+        justify-content: space-between;
+        padding: 6px;
+        gap: 2px;
+    }
+
+    .action-group {
+        gap: 2px;
+    }
+
+    .action-divider {
+        margin: 0 2px;
+    }
+
+    .action-btn {
+        min-width: 44px;
+        /* Hit area targets */
+        min-height: 48px;
+        padding: 4px;
+        justify-content: center;
+    }
+
+    .action-label {
+        display: none;
+        /* Hide labels to save space */
+    }
+
+    /* Info Panel Sidebar */
+    #info-panel {
+        top: 110px;
+        /* Below double top-bar */
+        bottom: 70px;
+        /* Above action bar */
+        width: 100%;
+        max-width: 100%;
+        right: 0;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        border: 1px solid var(--panel-border);
+        border-bottom: none;
+        transform: translateY(120%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 40;
+    }
+
+    #info-panel.collapsed {
+        transform: translateY(0);
+        bottom: calc(100vh - 120px);
+    }
+
+    #info-panel:not(.collapsed) {
+        transform: translateY(0);
+    }
+
+    .panel-toggle {
+        left: unset;
+        right: 16px;
+        top: -36px;
+        border-radius: var(--radius-md) var(--radius-md) 0 0;
+        border: 1px solid var(--panel-border);
+        border-bottom: none;
+        width: 80px;
+        height: 36px;
+        transform: none !important;
+        color: transparent;
+        /* Hide the desktop arrow */
+    }
+
+    .panel-toggle::after {
+        content: "▼ Back";
+        color: var(--gold);
+        font-size: 14px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
+        font-family: var(--font-body);
+        font-weight: 600;
+    }
+
+    #info-panel.collapsed .panel-toggle {
+        background: var(--panel-bg-solid);
+    }
+
+    #info-panel.collapsed .panel-toggle::after {
+        content: "ℹ️ Info";
+    }
+
+    .panel-content {
+        padding-left: var(--space-lg);
+    }
+
+    /* Modals (Research / Trains) */
+    .modal-panel-content {
+        width: 95vw !important;
+        max-height: 85vh;
+        border-radius: var(--radius-lg);
+    }
+
+    .modal-close-btn {
+        min-width: 44px;
+        min-height: 44px;
+        font-size: 20px;
+    }
+
+    .train-card-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tech-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tech-card {
+        padding: var(--space-lg);
+    }
+
+    .tech-unlock-btn {
+        min-height: 44px;
+        min-width: 80px;
+        padding: 0 16px;
+    }
+
+    /* Minimap */
+    #minimap-container {
+        width: 120px;
+        height: 90px;
+        bottom: 70px;
+        right: var(--space-sm);
+        z-index: 10;
+    }
+
+    /* Notifications */
+    #notifications-container {
+        top: 120px;
+        right: 50%;
+        transform: translateX(50%);
+        width: calc(100vw - 32px);
+    }
+
+    .notification {
+        padding: var(--space-md);
+    }
+
+    .mobile-hide {
+        display: none !important;
+    }
 }

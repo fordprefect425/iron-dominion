@@ -55,4 +55,16 @@ window.addEventListener('resize', () => {
   game.scale.resize(window.innerWidth, window.innerHeight);
 });
 
+// Pause game when backgrounded (saves battery on mobile)
+document.addEventListener('visibilitychange', () => {
+  const scene = game.scene.getScene('GameScene');
+  if (!scene) return;
+
+  if (document.hidden) {
+    scene.scene.pause();
+  } else {
+    scene.scene.resume();
+  }
+});
+
 export { game };
